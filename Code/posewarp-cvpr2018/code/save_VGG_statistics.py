@@ -34,7 +34,7 @@ def main(gpu_id):
     mean_response = []
     num_elements = []
     for batch in range(n_batches):
-        print batch
+        print(batch)
         x, y = next(train_feed)
         pred_batch = vgg_model.predict(util.vgg_preprocess(x[0]))
 
@@ -55,11 +55,11 @@ def main(gpu_id):
     # Now calculate std. dev. of each channel
     std_response = []
     for batch in range(n_batches):
-        print batch
+        print(batch)
         x, y = next(train_feed)
         pred_batch = vgg_model.predict(util.vgg_preprocess(x[0]))
 
-        for i in xrange(len(pred_batch)):
+        for i in range(len(pred_batch)):
             mean_response_i = np.reshape(mean_response[i], (1, 1, 1, -1))
             mean_response_i = np.tile(mean_response_i, (pred_batch[i].shape[0:3]) + (1,))
 

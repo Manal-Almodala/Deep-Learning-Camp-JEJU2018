@@ -23,12 +23,12 @@ def get_general_params():
     # l-elbow (6), l-wrist (7), r-hip (8), r-knee (9), r-ankle (10), l-hip (11), l-knee (12), l-ankle (13)
     param['limbs'] = [[0, 1], [2, 3], [3, 4], [5, 6], [6, 7], [8, 9], [9, 10], [11, 12], [12, 13], [2, 5, 8, 11]]
 
-    param['n_training_iter'] = 200000
+    param['n_training_iter'] = 100000
     param['test_interval'] = 500
     param['model_save_interval'] = 1000
-    param['project_dir'] = '/afs/csail.mit.edu/u/b/balakg/pose/pose2image/repo'
+    param['project_dir'] = '../'
     param['model_save_dir'] = param['project_dir'] + '/models'
-    param['data_dir'] = '/afs/csail.mit.edu/u/b/balakg/pose/datasets/posewarp'
-    param['batch_size'] = 4
+    param['data_dir'] = param['project_dir'] + '/data'
+    param['batch_size'] = 2
     return param
 

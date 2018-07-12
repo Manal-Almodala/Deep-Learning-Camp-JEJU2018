@@ -1,10 +1,13 @@
 from keras.applications.vgg19 import VGG19
 from keras.layers import AveragePooling2D, Conv2D, Input
 from keras.models import Model
+import tensorflow as tf
 
 # Our VGG implementation has the following differences from the standard vgg model:
 # 1. input size is now 256x256
 # 2. average pooling instead of max pooling to remove some grid-like artifacts during synthesis
+
+## Generates the truncated vgg model and set the weights from the pretrained model.
 
 def vgg_norm():
     img_input = Input(shape=(256, 256, 3))

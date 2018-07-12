@@ -5,6 +5,9 @@ import transformations
 import scipy.io as sio
 import glob
 
+import matplotlib.pyplot as plt
+import numpy as np
+
 
 def make_vid_info_list(data_dir):
     vids = glob.glob(data_dir + '/frames/*')
@@ -41,6 +44,9 @@ def read_frame(vid_name, frame_num, box, x):
         img_name = os.path.join(vid_name, str(frame_num + 1) + '.png')
 
     img = cv2.imread(img_name)
+
+    # plt.imshow(img, cmap=)
+    plt.show()
     joints = x[:, :, frame_num] - 1.0
     box_frame = box[frame_num, :]
     scale = get_person_scale(joints)
@@ -108,12 +114,23 @@ def warp_example_generator(vid_info_list, param, do_augment=True, return_pose_ve
                 I0, joints0 = augment(I0, joints0, rflip, rscale, rshift, rdegree, rsat, img_height, img_width)
                 I1, joints1 = augment(I1, joints1, rflip, rscale, rshift, rdegree, rsat, img_height, img_width)
 
+            _img = np.round((((I0 / 2.0) + 0.5) * 255.0)).astype(np.uint8)
+
+            # cv2.imshow('imag', _img)
+            # cv2.waitKey(0)
+
             posemap0 = make_joint_heatmaps(img_height, img_width, joints0, sigma_joint, pose_dn)
             posemap1 = make_joint_heatmaps(img_height, img_width, joints1, sigma_joint, pose_dn)
+
+            # cv2.imshow('image', np.sum(posemap0, axis=2))
+            # cv2.waitKey(0)
 
             src_limb_masks = make_limb_masks(limbs, joints0, img_width, img_height)
             src_bg_mask = np.expand_dims(1.0 - np.amax(src_limb_masks, axis=2), 2)
             src_masks = np.log(np.concatenate((src_bg_mask, src_limb_masks), axis=2) + 1e-10)
+
+            # print(src_masks.shape)
+            # plt.matshow(src_masks[:,:, 1])
 
             x_src[i, :, :, :] = I0
             x_pose_src[i, :, :, :] = posemap0
@@ -212,7 +229,7 @@ def transfer_example_generator(examples0, examples1, param):
 
 
 def actionExampleGenerator(examples,param,return_pose_vectors=False):
-    
+
 	img_width = param['IMG_WIDTH']
 	img_height = param['IMG_HEIGHT']
 	pose_dn = param['posemap_downsample']
@@ -226,16 +243,16 @@ def actionExampleGenerator(examples,param,return_pose_vectors=False):
 		scale = scale_factor/scale0
 		I0,joints0 = centerAndScaleImage(I0,img_width,img_height,pos0,scale,joints0)
 		posemap0 = makeJointHeatmaps(img_height,img_width,joints0,sigma_joint,pose_dn)
-		
+
 		src_limb_masks = makeLimbMasks(joints0,img_width,img_height)	
 		bg_mask = np.expand_dims(1.0 - np.amax(src_limb_masks,axis=2),2)
 		src_masks = np.log(np.concatenate((bg_mask,src_limb_masks),axis=2)+1e-10)
-	
+
 		for i in range(1,len(examples)):	
 			I1,joints1,scale1,pos1 = readExampleInfo(examples[i])
 			I1,joints1 = centerAndScaleImage(I1,img_width,img_height,pos0,scale,joints1)
 			posemap1 = makeJointHeatmaps(img_height,img_width,joints1,sigma_joint,pose_dn)
-	
+
 			X_src = np.expand_dims(I0,0)
 			X_pose_src = np.expand_dims(posemap0,0)
 			X_pose_tgt = np.expand_dims(posemap1,0)
@@ -247,7 +264,7 @@ def actionExampleGenerator(examples,param,return_pose_vectors=False):
 			X_posevec_tgt = np.expand_dims(joints1.flatten(),0)
 
 			Y[i,:,:,:] = I1
-	
+
 			if(not return_pose_vectors):
 				yield ([X_src,X_pose_src,X_pose_tgt,X_mask_src,X_trans],Y)
 			else:
@@ -390,7 +407,7 @@ def make_joint_heatmaps(height, width, joints, sigma, pose_dn):
 
     for i in range(n_joints):
         if (joints[i, 0] <= 0 or joints[i, 1] <= 0 or joints[i, 0] >= width - 1 or
-                joints[i, 1] >= height - 1):
+                    joints[i, 1] >= height - 1):
             continue
 
         H[:, :, i] = make_gaussian_map(width, height, joints[i, :], var, var, 0.0)

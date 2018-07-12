@@ -241,7 +241,6 @@ def make_warped_stack(args):
 
     return warps
 
-
 def unet(x_in, pose_in, nf_enc, nf_dec):
     x0 = my_conv(x_in, nf_enc[0], ks=7)  # 256
     x1 = my_conv(x0, nf_enc[1], strides=2)  # 128
@@ -273,11 +272,16 @@ def network_posewarp(param):
     n_limbs = param['n_limbs']
 
     # Inputs
-    src_in = Input(shape=(img_h, img_w, 3))
-    pose_src = Input(shape=(img_h / pose_dn, img_w / pose_dn, n_joints))
-    pose_tgt = Input(shape=(img_h / pose_dn, img_w / pose_dn, n_joints))
-    src_mask_prior = Input(shape=(img_h, img_w, n_limbs+1))
-    trans_in = Input(shape=(2, 3, n_limbs+1))
+
+    # Input image
+    src_in = Input(shape=(img_h, img_w, 3), name="in_img0")
+    # Original pose. It is a downscaled image with gaussian bumps in the joints.
+    pose_src = Input(shape=(img_h / pose_dn, img_w / pose_dn, n_joints), name="in_pose0")
+    # Target pose, same as before.
+    pose_tgt = Input(shape=(img_h / pose_dn, img_w / pose_dn, n_joints), name="in_pose1")
+    # ???
+    src_mask_prior = Input(shape=(img_h, img_w, n_limbs+1), name="mask_prior")
+    trans_in = Input(shape=(2, 3, n_limbs+1), name="trans_in")
 
     # 1. FG/BG separation
     x = unet(src_in, pose_src, [64]*2 + [128]*9, [128]*4 + [32])
