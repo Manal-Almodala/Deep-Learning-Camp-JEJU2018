@@ -1,4 +1,5 @@
 import os
+import tensorflow as tf
 import numpy as np
 import cv2
 import transformations
@@ -43,7 +44,7 @@ def read_frame(vid_name, frame_num, box, x):
     if not os.path.isfile(img_name):
         img_name = os.path.join(vid_name, str(frame_num + 1) + '.png')
 
-    img = cv2.imread(img_name)
+    img = cv2.imread(img_name)[:,:,::-1]
 
     # plt.imshow(img, cmap=)
     plt.show()

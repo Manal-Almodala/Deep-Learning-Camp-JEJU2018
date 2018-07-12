@@ -62,7 +62,7 @@ def train(model_name, gpu_id):
             summary_writer.add_summary(image_summary)
 
             if step > 0 and step % params['model_save_interval'] == 0:
-                model.save(network_dir + '/' + str(step) + '.h5')
+                model.save_weights(network_dir + '/' + str(step) + '.h5')
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:

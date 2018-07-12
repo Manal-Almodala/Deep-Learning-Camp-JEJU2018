@@ -225,6 +225,8 @@ def affine_warp(im, theta):
 
 
 def make_warped_stack(args):
+    import networks
+
     mask = args[0]
     src_in = args[1]
     trans_in = args[2]

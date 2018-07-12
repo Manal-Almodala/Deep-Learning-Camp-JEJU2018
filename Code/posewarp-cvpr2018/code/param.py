@@ -25,7 +25,7 @@ def get_general_params():
 
     param['n_training_iter'] = 100000
     param['test_interval'] = 500
-    param['model_save_interval'] = 1000
+    param['model_save_interval'] = 100
     param['project_dir'] = '../'
     param['model_save_dir'] = param['project_dir'] + '/models'
     param['data_dir'] = param['project_dir'] + '/data'
