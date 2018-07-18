@@ -1,3 +1,12 @@
 /Papers/*
 /Code/tuto_UNet/*
-/Code/*
+/Code/posewarp-cvpr2018/output/*
+/Code/posewarp-cvpr2018/output_bk/*
+/Code/posewarp-cvpr2018/code/logs/*
+/Code/rl-seminar1/*
+/Code/skeleton2d3d/*
+/Code/tf-openpose/*
+/Code/tuto_UNet/*
+
+*/__pycache__
+*/.ipynb_checkpoints

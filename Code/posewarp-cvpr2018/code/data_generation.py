@@ -40,7 +40,7 @@ def get_person_scale(joints):
 
 
 def read_frame(vid_name, frame_num, box, x):
-    img_name = os.path.join(vid_name, str(frame_num + 1) + '.jpg')
+    img_name = os.path.join(vid_name, str(frame_num + 1) + '.png')
     if not os.path.isfile(img_name):
         img_name = os.path.join(vid_name, str(frame_num + 1) + '.png')
 
@@ -116,9 +116,6 @@ def warp_example_generator(vid_info_list, param, do_augment=True, return_pose_ve
                 I1, joints1 = augment(I1, joints1, rflip, rscale, rshift, rdegree, rsat, img_height, img_width)
 
             _img = np.round((((I0 / 2.0) + 0.5) * 255.0)).astype(np.uint8)
-
-            # cv2.imshow('imag', _img)
-            # cv2.waitKey(0)
 
             posemap0 = make_joint_heatmaps(img_height, img_width, joints0, sigma_joint, pose_dn)
             posemap1 = make_joint_heatmaps(img_height, img_width, joints1, sigma_joint, pose_dn)

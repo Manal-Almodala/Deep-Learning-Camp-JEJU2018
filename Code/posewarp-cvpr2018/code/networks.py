@@ -60,9 +60,9 @@ def discriminator(param):
     n_joints = param['n_joints']
     pose_dn = param['posemap_downsample']
 
-    x_tgt = Input(shape=(img_h, img_w, 3))
-    x_src_pose = Input(shape=(img_h / pose_dn, img_w / pose_dn, n_joints))
-    x_tgt_pose = Input(shape=(img_h / pose_dn, img_w / pose_dn, n_joints))
+    x_tgt = Input(shape=(img_h, img_w, 3), name="in_disc_imtgt")
+    x_src_pose = Input(shape=(img_h / pose_dn, img_w / pose_dn, n_joints), name="in_disc_posrc")
+    x_tgt_pose = Input(shape=(img_h / pose_dn, img_w / pose_dn, n_joints), name="in_disc_potgt")
 
     x = my_conv(x_tgt, 64, ks=5)
     x = MaxPooling2D()(x) # 128
@@ -276,7 +276,8 @@ def network_posewarp(param):
     # Inputs
 
     # Input image
-    src_in = Input(shape=(img_h, img_w, 3), name="in_img0")
+    src_in =  Input(shape=(img_h, img_w, 3), name="in_img0")
+    src_out = Input(shape=(img_h, img_w, 3), name="in_img1")
     # Original pose. It is a downscaled image with gaussian bumps in the joints.
     pose_src = Input(shape=(img_h / pose_dn, img_w / pose_dn, n_joints), name="in_pose0")
     # Target pose, same as before.
